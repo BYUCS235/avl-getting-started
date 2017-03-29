@@ -4,8 +4,8 @@
 #include "Binary_Tree.h"
 #include <ostream>
 
-template<typename Item_Type>
-void pre_order_traversal(const Binary_Tree<Item_Type>& the_tree, 
+
+void pre_order_traversal(const Binary_Tree& the_tree, 
 			 std::ostream& out, int level)
 {
   if (the_tree.is_null()) { 

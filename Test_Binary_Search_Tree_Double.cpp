@@ -17,11 +17,11 @@ int main(int argc, char* argv[])
 	 << "or Red_Black_Tree\n";
     return 1;
   }
-  Binary_Search_Tree<double>* the_tree = NULL;
+  Binary_Search_Tree* the_tree = NULL;
   if (string(argv[1]) == "Binary_Search_Tree") 
-    the_tree = new Binary_Search_Tree<double>;
+    the_tree = new Binary_Search_Tree;
   else if (string(argv[1]) == "AVL_Tree")
-    the_tree = new AVL_Tree<double>; 
+    the_tree = new AVL_Tree; 
  
   if (the_tree == NULL) {
     cerr << "Did not specify a BST that is recognized\n";
@@ -29,18 +29,18 @@ int main(int argc, char* argv[])
 	 << "or Red_Black_Tree\n";
     return 1;
   }
-  double value;
+  int value;
   while (cin >> value) {
     if (value == 0.0) break;
     the_tree->insert(value);
     pre_order_traversal(*the_tree, cout, 0);
   }
   cin.clear();
-  //  while (cin >> value) {
-  //  if (value == 0.0) break;
-  //  the_tree->erase(value);
-  //  pre_order_traversal(*the_tree, cout, 0);
-  // }
+  while (cin >> value) {
+    if (value == 0.0) break;
+    the_tree->erase(value);
+    pre_order_traversal(*the_tree, cout, 0);
+  }
 }
 
 

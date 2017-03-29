@@ -7,17 +7,17 @@
 using namespace std;
 
 /** Definition of the AVL Binary Search Tree class.
-    @param Item_Type The type of item to be stored in the tree
-    Note: Item_Type must define the less-than operator as a 
+    @param int The type of item to be stored in the tree
+    Note: int must define the less-than operator as a 
     total ordering.
 */
-template<typename Item_Type>
-class AVL_Tree : public BST_With_Rotate<Item_Type> {
+
+class AVL_Tree : public BST_With_Rotate {
   
  public:
   // Constructor
   /** Construct an empty AVL_Tree */
-  AVL_Tree() : BST_With_Rotate<Item_Type>() {}
+  AVL_Tree() : BST_With_Rotate() {}
   
   // Public Member Functions
   /** Insert an item into the tree by calling overridden insert function. 
@@ -25,7 +25,7 @@ class AVL_Tree : public BST_With_Rotate<Item_Type> {
       @param item The item to be inserted
       @return true only if the item was not already in the tree
   */
-  virtual bool insert(const Item_Type& item) {
+  virtual bool insert(const int& item) {
     cout << "AVL Insert "<<item<<endl;
     return insert(this->root, item); }
   
@@ -40,7 +40,7 @@ class AVL_Tree : public BST_With_Rotate<Item_Type> {
       @param item The item to be inserted
       @return true only if the item was not already in the
   */
-  virtual bool insert(BTNode<Item_Type>*&, const Item_Type&);
+  virtual bool insert(BTNode*&, const int&);
   
   /** Correct a critical left balance condition
       pre:  local_root is the root of an AVL subtree that is
@@ -49,7 +49,7 @@ class AVL_Tree : public BST_With_Rotate<Item_Type> {
       @param local_root is the root of the AVL subtree
       that needs rebalancing
   */
-  void rebalance_left(BTNode<Item_Type>*& local_root);
+  void rebalance_left(BTNode*& local_root);
   
   /** Correct a critical right balance condition
       pre:  local_root is the root of an AVL subtree that is
@@ -58,7 +58,7 @@ class AVL_Tree : public BST_With_Rotate<Item_Type> {
       @param local_root is the root of the AVL subtree
       that needs rebalancing
   */
-  void rebalance_right(BTNode<Item_Type>*& local_root);
+  void rebalance_right(BTNode*& local_root);
 
 
   // Data Fields
@@ -68,12 +68,11 @@ class AVL_Tree : public BST_With_Rotate<Item_Type> {
 }; // End of AVL_Tree class definition
 
 // Implementation of member functions
-template<typename Item_Type>
-bool 
-AVL_Tree<Item_Type>::insert(BTNode<Item_Type>*& local_root,
-			    const Item_Type& item) {
+inline bool AVL_Tree::insert(BTNode*& local_root,
+			    const int& item) {
+	cout << "Insert "<<item<<endl;
   if (local_root == NULL) {
-    local_root = new AVLNode<Item_Type>(item);
+    local_root = new AVLNode(item);
     increase = true;
     return true;
   }
@@ -81,30 +80,31 @@ AVL_Tree<Item_Type>::insert(BTNode<Item_Type>*& local_root,
     if (item < local_root->data) {
       bool return_value = insert(local_root->left, item);
       if (increase) {
-	// Height of the left subtree has increased
-	AVLNode<Item_Type>* AVL_local_root =
-	  dynamic_cast<AVLNode<Item_Type>*>(local_root);
-	switch (AVL_local_root->balance) {
-	case AVLNode<Item_Type>::BALANCED :
-	  // local root is now left heavy
-	  AVL_local_root->balance = AVLNode<Item_Type>::LEFT_HEAVY;
-	  break;
-	case AVLNode<Item_Type>::RIGHT_HEAVY :
-	  // local root is now right heavy
-	  AVL_local_root->balance = AVLNode<Item_Type>::BALANCED;
-	  // Overall height of local root remains the same
-	  increase = false;
-	  break;
-	case AVLNode<Item_Type>::LEFT_HEAVY :
-	  // local root is now critically unbalanced
-	  this->rebalance_left(local_root);
-	  increase = false;
-	  break;
-	} // End switch
+      	// Height of the left subtree has increased
+      	AVLNode* AVL_local_root =
+      	  dynamic_cast<AVLNode*>(local_root);
+      	switch (AVL_local_root->balance) {
+      	case AVLNode::BALANCED :
+      	  // local root is now left heavy
+      	  AVL_local_root->balance = AVLNode::LEFT_HEAVY;
+      	  break;
+      	case AVLNode::RIGHT_HEAVY :
+      	  // local root is now right heavy
+      	  AVL_local_root->balance = AVLNode::BALANCED;
+      	  // Overall height of local root remains the same
+      	  increase = false;
+      	  break;
+      	case AVLNode::LEFT_HEAVY :
+      	  // local root is now critically unbalanced
+      	  this->rebalance_left(local_root);
+      	  increase = false;
+      	  break;
+      	} // End switch
       } // End if (increase)
       return return_value;
     }
     else if (local_root->data < item) {
+      cout << "Insert on right not implemented"<<endl;
     }
     else {
       increase = false;
@@ -113,35 +113,34 @@ AVL_Tree<Item_Type>::insert(BTNode<Item_Type>*& local_root,
   }
 }
 
-template<typename Item_Type>
-  void AVL_Tree<Item_Type>::rebalance_left(BTNode<Item_Type>*& local_root) {
+inline  void AVL_Tree::rebalance_left(BTNode*& local_root) {
 
   // Cast local_root to an AVLNode pointer
-  AVLNode<Item_Type>* AVL_local_root =
-    dynamic_cast<AVLNode<Item_Type>*>(local_root);
+  AVLNode* AVL_local_root =
+    dynamic_cast<AVLNode*>(local_root);
   // Obtain reference to the left child
-  AVLNode<Item_Type>* left_child = 
-    dynamic_cast<AVLNode<Item_Type>*>(local_root->left);
+  AVLNode* left_child = 
+    dynamic_cast<AVLNode*>(local_root->left);
   // See whether left-right-heavy
-  if (left_child->balance == AVLNode<Item_Type>::RIGHT_HEAVY) {
+  if (left_child->balance == AVLNode::RIGHT_HEAVY) {
     // Obtain a reference to the left-right child
-    AVLNode<Item_Type>* left_right_child = 
-      dynamic_cast<AVLNode<Item_Type>*>(left_child->right);
+    AVLNode* left_right_child = 
+      dynamic_cast<AVLNode*>(left_child->right);
     // Adjust the balances to be the new values after rotations are 
     // performed
-    if (left_right_child->balance == AVLNode<Item_Type>::LEFT_HEAVY) {
-      left_child->balance = AVLNode<Item_Type>::BALANCED;
-      left_right_child->balance = AVLNode<Item_Type>::BALANCED;
-      AVL_local_root->balance = AVLNode<Item_Type>::RIGHT_HEAVY;
+    if (left_right_child->balance == AVLNode::LEFT_HEAVY) {
+      left_child->balance = AVLNode::BALANCED;
+      left_right_child->balance = AVLNode::BALANCED;
+      AVL_local_root->balance = AVLNode::RIGHT_HEAVY;
     } else if (left_right_child->balance 
-               == AVLNode<Item_Type>::BALANCED) {
-      left_child->balance = AVLNode<Item_Type>::BALANCED;
-      left_right_child->balance = AVLNode<Item_Type>::BALANCED;
-      AVL_local_root->balance = AVLNode<Item_Type>::BALANCED;
+               == AVLNode::BALANCED) {
+      left_child->balance = AVLNode::BALANCED;
+      left_right_child->balance = AVLNode::BALANCED;
+      AVL_local_root->balance = AVLNode::BALANCED;
     } else {
-      left_child->balance = AVLNode<Item_Type>::LEFT_HEAVY;
-      left_right_child->balance = AVLNode<Item_Type>::BALANCED;
-      AVL_local_root->balance = AVLNode<Item_Type>::BALANCED;
+      left_child->balance = AVLNode::LEFT_HEAVY;
+      left_right_child->balance = AVLNode::BALANCED;
+      AVL_local_root->balance = AVLNode::BALANCED;
     }
     // Perform left rotation
     this->rotate_left(local_root->left);
@@ -150,16 +149,15 @@ template<typename Item_Type>
        local root (new right child) will both be balanced
        after the rotation.
     */
-    left_child->balance = AVLNode<Item_Type>::BALANCED;
-    AVL_local_root->balance = AVLNode<Item_Type>::BALANCED;
+    left_child->balance = AVLNode::BALANCED;
+    AVL_local_root->balance = AVLNode::BALANCED;
   }
   // Finally rotate right
   this->rotate_right(local_root);
 }
 
-template<typename Item_Type>
-void
-AVL_Tree<Item_Type>::rebalance_right(BTNode<Item_Type>*& local_root) {
+inline void AVL_Tree::rebalance_right(BTNode*& local_root) {
+  cout <<"rebalance_right not implemented"<<endl;
 }
 
 

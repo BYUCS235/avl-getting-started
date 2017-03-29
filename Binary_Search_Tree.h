@@ -4,17 +4,17 @@
 #include "Binary_Tree.h"
 
 /** Definition of the Binary Search Tree class. 
-    @param Item_Type The type of item to be stored in the tree
-    Note: Item_Type must define the less-than operator as a 
+    @param int The type of item to be stored in the tree
+    Note: int must define the less-than operator as a 
     total ordering.
 */
-template<typename Item_Type>
-  class Binary_Search_Tree : public Binary_Tree<Item_Type>
+
+  class Binary_Search_Tree : public Binary_Tree
 {
   public:
   // Constructor
   /** Construct an empty Binary_Search_Tree */
-  Binary_Search_Tree() : Binary_Tree<Item_Type>() {}
+  Binary_Search_Tree() : Binary_Tree() {}
 
   // Public Member Functions
   /** Insert an item into the tree. 
@@ -23,7 +23,7 @@ template<typename Item_Type>
       @return true if the item was not already
               in the tree, false otherwise
   */ 
-  virtual bool insert(const Item_Type& item);
+  virtual bool insert(const int& item);
 
   /** Remove an item from the tree. 
       post: The item is no longer in the tree.
@@ -31,14 +31,14 @@ template<typename Item_Type>
       @return true if the item was in the tree,
               false otherwise
   */  
-  virtual bool erase(const Item_Type& item);
+  virtual bool erase(const int& item);
 
   /** Determine whether an item is in the tree.
       @param item The item sought
       @return A const pointer to the item if in the
               tree, or NULL if not
   */
-  const Item_Type* find(const Item_Type& target) const;
+  const int* find(const int& target) const;
 
   private:
 
@@ -50,8 +50,8 @@ template<typename Item_Type>
       @return true if the item was not already in the
               tree, false otherwise
   */  
-  virtual bool insert(BTNode<Item_Type>*& local_root, 
-		      const Item_Type& item);
+  virtual bool insert(BTNode*& local_root, 
+		      const int& item);
 
   /** Remove an item from the tree. 
       post: The item is no longer in the tree.
@@ -60,16 +60,16 @@ template<typename Item_Type>
       @return true if the item was in the tree,
               false otherwise
   */  
-  virtual bool erase(BTNode<Item_Type>*& local_root, 
-		     const Item_Type& item);
+  virtual bool erase(BTNode*& local_root, 
+		     const int& item);
 
   /** Determine whether an item is in the tree.
       @param local_root A reference to the current root
       @param target The item sought
       @return A const pointer to the item in the tree
   */
-  const Item_Type* find(BTNode<Item_Type>* local_root, 
-                        const Item_Type& target) const;
+  const int* find(BTNode* local_root, 
+                        const int& target) const;
   
   /** Find a replacement for a node that is being deleted.
       This function finds the rightmost local root that 
@@ -80,25 +80,20 @@ template<typename Item_Type>
       @param old_root Reference to the pointer to old parent
       @param local_root Reference to the pointer to local root
   */
-  virtual void replace_parent(BTNode<Item_Type>*& old_root, 
-                              BTNode<Item_Type>*& local_root);
+  virtual void replace_parent(BTNode*& old_root, 
+                              BTNode*& local_root);
 
 }; // End binary search tree
 
 // Implementation of member functions
-template<typename Item_Type>
-  bool Binary_Search_Tree<Item_Type>::insert(
-    const Item_Type& item) {
+inline bool Binary_Search_Tree::insert(const int& item) {
   return insert(this->root, item);
 }
 
-template<typename Item_Type>
-  bool Binary_Search_Tree<Item_Type>::insert(
-    BTNode<Item_Type>*& local_root,
-const Item_Type& item) {
+inline bool Binary_Search_Tree::insert(BTNode*& local_root,const int& item) {
   if (local_root == NULL) {
     local_root = 
-      new BTNode<Item_Type>(item);
+      new BTNode(item);
     return true;
   } else {
     if (item < local_root->data)
@@ -111,16 +106,12 @@ const Item_Type& item) {
   }
 }
 
-template<typename Item_Type>
-  bool Binary_Search_Tree<Item_Type>::erase(
-    const Item_Type& item) {
+
+inline bool Binary_Search_Tree::erase(const int& item) {
   return erase(this->root, item);
 }
 
-template<typename Item_Type>
-  bool Binary_Search_Tree<Item_Type>::erase(
-    BTNode<Item_Type>*& local_root,
-    const Item_Type& item) {
+inline bool Binary_Search_Tree::erase(BTNode*& local_root, const int& item) {
   if (local_root == NULL) {
     return false;
   } else {
@@ -129,7 +120,7 @@ template<typename Item_Type>
     else if (local_root->data < item)
       return erase(local_root->right, item);
     else { // Found item
-      BTNode<Item_Type>* old_root = local_root;
+      BTNode* old_root = local_root;
       if (local_root->left == NULL) {
         local_root = local_root->right;
       } else if (local_root->right == NULL) {
@@ -143,10 +134,9 @@ template<typename Item_Type>
   }
 }
 
-template<typename Item_Type>
-void 
-Binary_Search_Tree<Item_Type>::replace_parent(BTNode<Item_Type>*& old_root,
-					      BTNode<Item_Type>*& local_root) {
+
+inline void Binary_Search_Tree::replace_parent(BTNode*& old_root,
+					      BTNode*& local_root) {
   if (local_root->right != NULL) {
     replace_parent(old_root, local_root->right);
   } else {
@@ -155,16 +145,16 @@ Binary_Search_Tree<Item_Type>::replace_parent(BTNode<Item_Type>*& old_root,
     local_root = local_root->left;
   }
 }
-template<typename Item_Type>
-  const Item_Type* Binary_Search_Tree<Item_Type>::find(
-    const Item_Type& target) const {
+
+inline const int* Binary_Search_Tree::find(
+    const int& target) const {
   return find(this->root, target);
 }
 
-template<typename Item_Type>
-  const Item_Type* Binary_Search_Tree<Item_Type>::find(
-    BTNode<Item_Type>* local_root, 
-    const Item_Type& target) const {
+
+inline const int* Binary_Search_Tree::find(
+    BTNode* local_root, 
+    const int& target) const {
   if (local_root == NULL)
     return NULL;
   if (target < local_root->data)

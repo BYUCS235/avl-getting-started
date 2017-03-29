@@ -3,20 +3,19 @@
 #include <sstream>
 
 /** A node for a Binary Tree. */
-template<typename Item_Type>
-  struct BTNode 
+struct BTNode 
 {
   // Data Fields
-  Item_Type data;
-  BTNode<Item_Type>* left;
-  BTNode<Item_Type>* right;
+  int data;
+  BTNode* left;
+  BTNode* right;
   
   // Constructor
-  BTNode(const Item_Type& the_data, 
-         BTNode<Item_Type>* left_val = NULL,
-         BTNode<Item_Type>* right_val = NULL) : 
+  BTNode(const int& the_data, 
+         BTNode* left_val = NULL,
+         BTNode* right_val = NULL) : 
     data(the_data), left(left_val),  right(right_val) {}
-
+  BTNode() {}
   // Destructor (to avoid warning message)
   virtual ~BTNode() {}
 
@@ -29,9 +28,8 @@ template<typename Item_Type>
 }; // End BTNode
 
 // Overloading the ostream insertion operator
-template<typename Item_Type>
-  std::ostream& operator<<(std::ostream& out, 
-                           const BTNode<Item_Type>& node) {
+inline  std::ostream& operator<<(std::ostream& out, 
+                           const BTNode& node) {
   return out << node.to_string();
 }
 
