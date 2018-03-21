@@ -7,6 +7,8 @@ I have removed the template nature of the code so it only works for integers.  Y
 
 First lets talk about the overall UML for the lab.  Look at the UML for the AVL Tree in the book and think of how you would change it to interface with the Lab 7 test harness.
 
+![alt text](https://mjcleme.github.io/avluml.png)
+
 Then you will want to inherit from the interface files that are provided for you.  Given the NodeInterface.h file, you should create a Node.h file.  If you want to interface with the book code, you will want to inherit from both NodeInterface and AVLNode.
 ```c++
 #pragma once
