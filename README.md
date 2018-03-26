@@ -28,7 +28,7 @@ public:
 
 	int getData() const;
 
-	NodeInterface * getLeftChild();
+	NodeInterface * getLeftChild() const;
 
 	NodeInterface * getRightChild() const;
 
