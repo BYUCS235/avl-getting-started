@@ -54,7 +54,7 @@ int Node::getData() const
     cout << "getData"<<endl;
 }
 
-NodeInterface * Node::getLeftChild()
+NodeInterface * Node::getLeftChild() const
 {
     cout << "getLeftChild"<<endl;
 }
