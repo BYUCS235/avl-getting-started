@@ -105,6 +105,7 @@ inline bool AVL_Tree::insert(BTNode*& local_root,
     }
     else if (local_root->data < item) {
       cout << "Insert on right not implemented"<<endl;
+      return false;
     }
     else {
       increase = false;
